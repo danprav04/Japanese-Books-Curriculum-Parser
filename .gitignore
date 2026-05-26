@@ -5,3 +5,4 @@ venv/
 .env
 batch_run_log.txt
 test_html.txt
+test_ruby.py
