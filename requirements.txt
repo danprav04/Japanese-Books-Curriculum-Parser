@@ -1,2 +1,5 @@
 mecab-python3
 unidic-lite
+ebooklib
+mobi
+beautifulsoup4
