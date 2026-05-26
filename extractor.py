@@ -38,10 +38,27 @@ def extract_and_chunk(input_file, base_output_dir):
 
 def get_text_from_html(html_content):
     soup = BeautifulSoup(html_content, 'html.parser')
+    
     # Remove script/style tags
     for script in soup(["script", "style"]):
         script.extract()
-    text = soup.get_text(separator='\n')
+        
+    # Remove ruby phonetic text (<rt>) to keep just the base kanji
+    for rt in soup.find_all("rt"):
+        rt.extract()
+        
+    # Insert newlines around block elements so they don't merge, but inline elements flow seamlessly
+    block_elements = ['p', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'br']
+    for tag in soup.find_all(block_elements):
+        if tag.name == 'br':
+            tag.replace_with('\n')
+        else:
+            tag.insert_before('\n')
+            tag.insert_after('\n')
+            
+    # Extract text WITHOUT a separator so inline elements (like spans/ruby) don't get broken onto new lines
+    text = soup.get_text(separator='')
+    
     # Clean up empty lines
     lines = [line.strip() for line in text.splitlines() if line.strip()]
     return "\n".join(lines)
