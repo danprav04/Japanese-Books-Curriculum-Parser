@@ -1,5 +1,11 @@
 import os
 import argparse
+import sys
+
+# Ensure stdout and stderr support utf-8 to avoid crash on Japanese characters
+sys.stdout.reconfigure(encoding='utf-8')
+sys.stderr.reconfigure(encoding='utf-8')
+
 from extractor import extract_and_chunk
 from curriculum_builder import build_curriculum_for_book
 
